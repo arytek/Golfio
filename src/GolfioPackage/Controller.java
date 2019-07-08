@@ -1,4 +1,4 @@
-package sample;
+package GolfioPackage;
 
 public class Controller {
 }
