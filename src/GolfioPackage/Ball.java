@@ -7,14 +7,16 @@ import javafx.scene.shape.Line;
 
 public class Ball {
 
-    private Double xPos;
-    private Double yPos;
+    private double xPos;
+    private double yPos;
+    private double startX;
+    private double startY;
     private int height;
     private int width;
     private ImageView ballView;
-    private PowerIndicator currentLine;
+    private Line currentLine;
 
-    public Ball(Double xPos, Double yPos, int height, int width) {
+    public Ball(double xPos, double yPos, int height, int width) {
         this.xPos = xPos;
         this.yPos = yPos;
         this.height = height;
@@ -28,6 +30,7 @@ public class Ball {
         ballView.setFitHeight(height);
         ballView.setFitWidth(width);
         ballView.setPreserveRatio(true);
+        createEventHandlers();
     }
 
     public ImageView getView() {
@@ -42,9 +45,10 @@ public class Ball {
         return yPos + 10;
     }
 
-    public void createEventHandlers(ImageView ballView) {
+    public void createEventHandlers() {
         ballView.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
-            currentLine.initialisePowerIndicator(getX(), getY());
+                startX = ballView.getX() + 10;
+                startY = ballView.getY() + 10;
             if(!currentLine.isVisible()) {
                 currentLine.setVisible(true);
                 currentLine.setEndX(e.getX());
@@ -54,8 +58,7 @@ public class Ball {
 
         ballView.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
             if (currentLine == null) {
-                currentLine.createPowerIndicator(e.getX(), e.getY());
-                Main.aPane.getChildren().add(currentLine);
+                createPowerIndicator(this.getX(), this.getY());
             }  else {
                 currentLine.setEndX(e.getX());
                 currentLine.setEndY(e.getY());
@@ -66,4 +69,10 @@ public class Ball {
             currentLine.setVisible(false);
         });
     }
+
+    public void createPowerIndicator(double x, double y) {
+        this.currentLine = new Line(startX, startY, x, y);
+        Main.aPane.getChildren().add(currentLine);
+    }
+
 }

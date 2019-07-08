@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import java.io.FileInputStream;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Line;
+
 
 public class Main extends Application {
 
@@ -25,7 +27,6 @@ public class Main extends Application {
         hole.initialiseBall(holeImage);
         // Create a new AnchorPane
         aPane = new AnchorPane(ball.getView(), hole.getView());
-        ball.createEventHandlers(ball.getView());
         Scene scene = new Scene(aPane, 1000, 1000);
         primaryStage.setScene(scene);
         primaryStage.show();
