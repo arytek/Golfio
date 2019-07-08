@@ -37,5 +37,6 @@ public class Ball {
     public Double getyPos(){
         return yPos;
     }
+
 }
 

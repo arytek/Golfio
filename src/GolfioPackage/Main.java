@@ -42,7 +42,7 @@ public class Main extends Application {
             }
         });
 
-        ball.getView().addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
+        aPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
             if (currentLine == null) {
                 addLine(e.getX(), e.getY());
             }  else {
@@ -51,7 +51,7 @@ public class Main extends Application {
         }
         });
 
-        ball.getView().addEventHandler(MouseEvent.MOUSE_RELEASED, ev -> {
+        aPane.addEventHandler(MouseEvent.MOUSE_RELEASED, ev -> {
             currentLine.setVisible(false);
         });
         Scene scene = new Scene(aPane, 1000, 1000);
