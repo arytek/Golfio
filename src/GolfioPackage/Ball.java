@@ -2,14 +2,13 @@ package GolfioPackage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.FileInputStream;
 
 public class Ball {
     private Double xPos;
     private Double yPos;
     private int height;
     private int width;
-    ImageView ballView;
+    private ImageView ballView;
 
     public Ball(Double xPos, Double yPos, int height, int width) {
         this.xPos = xPos;
@@ -30,4 +29,13 @@ public class Ball {
     public ImageView getView() {
         return ballView;
     }
+
+    public Double getxPos(){
+        return xPos;
+    }
+
+    public Double getyPos(){
+        return yPos;
+    }
 }
+
