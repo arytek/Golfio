@@ -3,9 +3,7 @@ package GolfioPackage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
 
 public class Ball {
 
@@ -67,7 +65,7 @@ public class Ball {
             }
         });
 
-        ballView.addEventHandler(MouseEvent.MOUSE_RELEASED, ev -> {
+        ballView.addEventHandler(MouseEvent.MOUSE_RELEASED, e -> {
             currentLine.setVisible(false);
         });
     }
