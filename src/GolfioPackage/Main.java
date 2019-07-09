@@ -10,7 +10,7 @@ import javafx.scene.input.MouseEvent;
 import java.io.FileInputStream;
 import javafx.scene.layout.AnchorPane;
 import java.lang.Math;
-
+import java.text.DecimalFormat;
 
 public class Main extends Application {
 
@@ -18,6 +18,9 @@ public class Main extends Application {
     private Text mouseXText;
     private Text mouseYText;
     private Text DistanceText;
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
+    private static DecimalFormat df1 = new DecimalFormat("#.#");
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -31,12 +34,11 @@ public class Main extends Application {
         Hole hole = new Hole(563.0, 500.0, 20, 20);
         ball.initialiseBall(ballImage);
         hole.initialiseBall(holeImage);
-
-        mouseXText = new Text (20, 20, "0");
-        mouseYText = new Text (150, 20, "0");
+        mouseXText = new Text (20, 20, "X: 0");
+        mouseYText = new Text (20, 40, "Y: 0");
         mouseXText.setFont(Font.font ("Verdana", 20));
         mouseYText.setFont(Font.font ("Verdana", 20));
-        DistanceText = new Text (250, 20, "No Distance");
+        DistanceText = new Text (20, 60, "Distance: 0");
         DistanceText.setFont(Font.font ("Verdana", 20));
 
         // Create a new AnchorPane
@@ -53,8 +55,8 @@ public class Main extends Application {
 
     private void createPaneEventHandlers(AnchorPane aPane, Ball ball) {
         aPane.addEventHandler(MouseEvent.MOUSE_MOVED, e -> {
-            mouseXText.setText("X: " + e.getX());
-            mouseYText.setText("Y: " + e.getY());
+            mouseXText.setText("X: " + df1.format(e.getX()));
+            mouseYText.setText("Y: " + df1.format(e.getY()));
         });
 
         ball.getView().addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
@@ -62,7 +64,7 @@ public class Main extends Application {
             mouseYText.setText("Y: " + e.getY());
             double[] distNum = {710.0, e.getX(), 710.0, e.getY()};
             double distance = Math.hypot(distNum[0]-distNum[1], distNum[2]-distNum[3]);
-            DistanceText.setText("Distance: " + distance);
+            DistanceText.setText("Distance: " + df2.format(distance));
         });
     }
 }
