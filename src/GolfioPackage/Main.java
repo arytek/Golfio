@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import java.io.FileInputStream;
 import javafx.scene.layout.AnchorPane;
+import java.lang.Math;
 
 
 public class Main extends Application {
@@ -16,6 +17,7 @@ public class Main extends Application {
     public static AnchorPane aPane;
     private Text mouseXText;
     private Text mouseYText;
+    private Text DistanceText;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -34,10 +36,12 @@ public class Main extends Application {
         mouseYText = new Text (150, 20, "0");
         mouseXText.setFont(Font.font ("Verdana", 20));
         mouseYText.setFont(Font.font ("Verdana", 20));
+        DistanceText = new Text (250, 20, "No Distance");
+        DistanceText.setFont(Font.font ("Verdana", 20));
 
         // Create a new AnchorPane
-        aPane = new AnchorPane(ball.getView(), hole.getView(), mouseXText, mouseYText);
-        createPaneEventHandlers(aPane);
+        aPane = new AnchorPane(ball.getView(), hole.getView(), mouseXText, mouseYText, DistanceText);
+        createPaneEventHandlers(aPane, ball);
         Scene scene = new Scene(aPane, 1000, 1000);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -47,15 +51,18 @@ public class Main extends Application {
         launch(args);
     }
 
-    private void createPaneEventHandlers(AnchorPane aPane) {
+    private void createPaneEventHandlers(AnchorPane aPane, Ball ball) {
         aPane.addEventHandler(MouseEvent.MOUSE_MOVED, e -> {
             mouseXText.setText("X: " + e.getX());
             mouseYText.setText("Y: " + e.getY());
         });
 
-        aPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
+        ball.getView().addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
             mouseXText.setText("X: " + e.getX());
             mouseYText.setText("Y: " + e.getY());
+            double[] distNum = {710.0, e.getX(), 710.0, e.getY()};
+            double distance = Math.hypot(distNum[0]-distNum[1], distNum[2]-distNum[3]);
+            DistanceText.setText("Distance: " + distance);
         });
     }
 }

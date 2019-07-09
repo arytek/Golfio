@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
+import java.awt.BasicStroke;
 
 public class Ball {
 
@@ -51,6 +52,7 @@ public class Ball {
                 startY = ballView.getY() + 10;
                 if(!(currentLine == null)){
                     currentLine.setVisible(true);
+                    currentLine.getStrokeDashArray().addAll(10d, 10d, 10d, 10d);
                     currentLine.setEndX(e.getX());
                     currentLine.setEndY(e.getY());
                 }
@@ -60,6 +62,7 @@ public class Ball {
             if (currentLine == null) {
                 createPowerIndicator(this.getX(), this.getY());
             }  else {
+                currentLine.getStrokeDashArray().addAll(10d, 10d, 10d, 10d);
                 currentLine.setEndX(e.getX());
                 currentLine.setEndY(e.getY());
             }
