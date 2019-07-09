@@ -49,10 +49,6 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     private void createPaneEventHandlers(AnchorPane aPane, Ball ball) {
         aPane.addEventHandler(MouseEvent.MOUSE_MOVED, e -> {
             mouseXText.setText("X: " + df1.format(e.getX()));
@@ -66,5 +62,9 @@ public class Main extends Application {
             double distance = Math.hypot(distNum[0]-distNum[1], distNum[2]-distNum[3]);
             DistanceText.setText("Distance: " + df2.format(distance));
         });
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

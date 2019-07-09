@@ -9,7 +9,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import javafx.animation.Interpolator;
-import java.util.ArrayList;
 
 public class Ball {
 
@@ -20,9 +19,6 @@ public class Ball {
     private int height;
     private int width;
     private ImageView ballView;
-    private Timeline timeline;
-    private double maxOffset;
-    private ArrayList<Line> arrayLines = new ArrayList<Line>();
     public Line currentLine;
 
     public Ball(double xPos, double yPos, int height, int width) {
@@ -59,9 +55,7 @@ public class Ball {
                 startX = ballView.getX() + 10;
                 startY = ballView.getY() + 10;
                 if(!(currentLine == null)){
-                   // currentLine.setDisable(false);
-                  //  currentLine.setVisible(true);
-                    currentLine.getStrokeDashArray().addAll(10d, 10d, 10d, 10d);
+                    createPowerIndicator(this.getX(), this.getY());
                     currentLine.setEndX(e.getX());
                     currentLine.setEndY(e.getY());
                 }
@@ -71,32 +65,35 @@ public class Ball {
             if (currentLine == null) {
                 createPowerIndicator(this.getX(), this.getY());
             }  else {
-                currentLine.getStrokeDashArray().addAll(10d, 10d, 10d, 10d);
+                createPaneAnimations();
                 currentLine.setEndX(e.getX());
                 currentLine.setEndY(e.getY());
-            }
-            if(timeline == null){
-                createPaneAnimations();
+
             }
         });
 
         ballView.addEventHandler(MouseEvent.MOUSE_RELEASED, e -> {
-                //   currentLine.setDisable(true);
-                //  currentLine.setVisible(false);
+            Main.aPane.getChildren().remove(currentLine);
         });
     }
 
     public void createPowerIndicator(double x, double y) {
         this.currentLine = new Line(startX, startY, x, y);
-        arrayLines.add(currentLine);
         Main.aPane.getChildren().add(currentLine);
     }
 
-    public void createPaneAnimations(){
-        maxOffset = currentLine.getStrokeDashArray().stream().reduce(0d, (a, b) -> a + b);
-        timeline = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(currentLine.strokeDashOffsetProperty(), 0, Interpolator.LINEAR)),
-        new KeyFrame(Duration.seconds(50), new KeyValue(currentLine.strokeDashOffsetProperty(), maxOffset, Interpolator.LINEAR)));
+    public void createPaneAnimations() {
+        currentLine.getStrokeDashArray().addAll(10d, 10d, 10d, 10d);
+        double maxOffset = currentLine.getStrokeDashArray().stream().reduce(0d, (a, b) -> a + b);
+        Timeline timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.setAutoReverse(true);
+
+        KeyFrame keyFrameOne = new KeyFrame(Duration.ZERO, new KeyValue(currentLine.strokeDashOffsetProperty(), 0, Interpolator.LINEAR));
+        KeyFrame keyFrameTwo = new KeyFrame(Duration.seconds(50), new KeyValue(currentLine.strokeDashOffsetProperty(), maxOffset, Interpolator.LINEAR));
+
+        //add the keyframe to the timeline
+        timeline.getKeyFrames().addAll(keyFrameOne, keyFrameTwo);
         timeline.play();
     }
 }
