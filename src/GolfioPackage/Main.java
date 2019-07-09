@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import java.io.FileInputStream;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Line;
 
 
 public class Main extends Application {

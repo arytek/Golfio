@@ -51,11 +51,11 @@ public class Ball {
         ballView.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
                 startX = ballView.getX() + 10;
                 startY = ballView.getY() + 10;
-            if(!currentLine.isVisible()) {
-                currentLine.setVisible(true);
-                currentLine.setEndX(e.getX());
-                currentLine.setEndY(e.getY());
-            }
+                if(!(currentLine == null)){
+                    currentLine.setVisible(true);
+                    currentLine.setEndX(e.getX());
+                    currentLine.setEndY(e.getY());
+                }
         });
 
         ballView.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
