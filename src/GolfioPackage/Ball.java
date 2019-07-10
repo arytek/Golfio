@@ -4,69 +4,43 @@ import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.*;
 import javafx.util.Duration;
 
-public class Ball {
+public class Ball extends Circle {
 
-    private double xPos;
-    private double yPos;
-    private double startX;
-    private double startY;
-    private int height;
-    private int width;
-    private ImageView ballView;
-    private Timeline ballMovement;
     public Line currentLine;
 
-    public Ball(double xPos, double yPos, int height, int width) {
-        this.xPos = xPos;
-        this.yPos = yPos;
-        this.height = height;
-        this.width = width;
+    public Ball(double radius, Color color) {
+        super(radius, color);
     }
 
-    public void initialiseBall(Image ball) {
-        ballView = new ImageView(ball);
-        ballView.setX(xPos);
-        ballView.setY(yPos);
-        ballView.setFitHeight(height);
-        ballView.setFitWidth(width);
-        ballView.setPreserveRatio(true);
+    public void initialiseBall(String userData, double xPosition, double yPosition) {
+        this.setUserData(userData);
+        this.setLayoutX(xPosition);
+        this.setLayoutY(yPosition);
         createEventHandlers();
-        //createBallMovementAnimation();
     }
 
-    public ImageView getView() {
-        return ballView;
-    }
-
-    public Double getX() {
-        return xPos + 10;
-    }
-
-    public Double getY() {
-        return yPos + 10;
+    public Circle getCircle() {
+        return this;
     }
 
     public void createEventHandlers() {
-        ballView.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
-                startX = ballView.getX() + 10;
-                startY = ballView.getY() + 10;
+        this.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
                 if(!(currentLine == null)){
-                    createPowerIndicator(this.getX(), this.getY());
+                    createPowerIndicator(this.getLayoutX(), this.getLayoutY());
                     currentLine.setEndX(e.getX());
                     currentLine.setEndY(e.getY());
                 }
         });
 
-        ballView.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
+        this.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
             if (currentLine == null) {
-                createPowerIndicator(this.getX(), this.getY());
+                createPowerIndicator(this.getLayoutX(), this.getLayoutY());
             }  else {
                 createPowerIndicatorAnimation();
                 currentLine.setEndX(e.getX());
@@ -75,60 +49,59 @@ public class Ball {
             }
         });
 
-        ballView.addEventHandler(MouseEvent.MOUSE_RELEASED, e -> {
+        this.addEventHandler(MouseEvent.MOUSE_RELEASED, e -> {
             Main.aPane.getChildren().remove(currentLine);
         });
     }
 
     public void createPowerIndicator(double x, double y) {
-        this.currentLine = new Line(startX, startY, x, y);
+        this.currentLine = new Line(this.getLayoutX(), this.getLayoutY(), x, y);
         Main.aPane.getChildren().add(currentLine);
     }
 
     public void createPowerIndicatorAnimation() {
         currentLine.getStrokeDashArray().addAll(10d, 10d, 10d, 10d);
         double maxOffset = currentLine.getStrokeDashArray().stream().reduce(0d, (a, b) -> a + b);
-        Timeline timeline = new Timeline();
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.setAutoReverse(true);
+        Timeline powerIndicatorTL = new Timeline();
+        powerIndicatorTL.setCycleCount(Timeline.INDEFINITE);
+        powerIndicatorTL.setAutoReverse(true);
 
         KeyFrame keyFrameOne = new KeyFrame(Duration.ZERO, new KeyValue(currentLine.strokeDashOffsetProperty(), 0, Interpolator.LINEAR));
         KeyFrame keyFrameTwo = new KeyFrame(Duration.seconds(50), new KeyValue(currentLine.strokeDashOffsetProperty(), maxOffset, Interpolator.LINEAR));
 
-        //add the keyframe to the timeline
-        timeline.getKeyFrames().addAll(keyFrameOne, keyFrameTwo);
-        timeline.play();
+        // Add the keyframe to the powerIndicator timeline.
+        powerIndicatorTL.getKeyFrames().addAll(keyFrameOne, keyFrameTwo);
+        powerIndicatorTL.play();
     }
 
     public void createBallMovementAnimation(){
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(20),
+        Timeline ballMovementTL = new Timeline(new KeyFrame(Duration.millis(20),
                 new EventHandler<ActionEvent>() {
 
-                    double dx = 7; //Step on x or velocity
-                    double dy = 3; //Step on y
+                    double deltaX  = 0; //Step on x or velocity
+                    double deltaY  = 0; //Step on y
 
                     @Override
-                    public void handle(ActionEvent t) {
-                        //move the ball
-                        ballView.setLayoutX(ballView.getLayoutX() + dx);
-                        ballView.setLayoutY(ballView.getLayoutY() + dy);
+                    public void handle(final ActionEvent t) {
 
-                        Bounds bounds = Main.aPane.getBoundsInLocal();
+                        getCircle().setLayoutX(getCircle().getLayoutX() + deltaX);
+                        getCircle().setLayoutY(getCircle().getLayoutY() + deltaY);
 
-                        final boolean atRightBorder = ballView.getLayoutX() >= (bounds.getMaxX() - 100.00);
-                        final boolean atLeftBorder = ballView.getLayoutX() <= (bounds.getMinX() + 100.00);
-                        final boolean atBottomBorder = ballView.getLayoutY() >= (bounds.getMaxY() - 100.00);
-                        final boolean atTopBorder = ballView.getLayoutY() <= (bounds.getMinY() + 100.00);
+                        final Bounds bounds = Main.aPane.getBoundsInLocal();
+                        final boolean atRightBorder = getCircle().getLayoutX() >= (bounds.getMaxX() - getCircle().getRadius());
+                        final boolean atLeftBorder = getCircle().getLayoutX() <= (bounds.getMinX() + getCircle().getRadius());
+                        final boolean atBottomBorder = getCircle().getLayoutY() >= (bounds.getMaxY() - getCircle().getRadius());
+                        final boolean atTopBorder = getCircle().getLayoutY() <= (bounds.getMinY() + getCircle().getRadius());
 
                         if (atRightBorder || atLeftBorder) {
-                            dx *= -1;
+                            deltaX *= -1;
                         }
                         if (atBottomBorder || atTopBorder) {
-                            dy *= -1;
+                            deltaY *= -1;
                         }
                     }
                 }));
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+        ballMovementTL.setCycleCount(Timeline.INDEFINITE);
+        ballMovementTL.play();
     }
-    }
+}

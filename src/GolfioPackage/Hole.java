@@ -2,31 +2,22 @@ package GolfioPackage;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
-public class Hole {
-    private Double xPos;
-    private Double yPos;
-    private int height;
-    private int width;
-    ImageView holeView;
+public class Hole extends Circle {
 
-    public Hole(Double xPos, Double yPos, int height, int width) {
-        this.xPos = xPos;
-        this.yPos = yPos;
-        this.height = height;
-        this.width = width;
+    public Hole(double radius, Color color) {
+        super(radius, color);
     }
 
-    public void initialiseBall(Image hole) {
-        holeView = new ImageView(hole);
-        holeView.setX(xPos);
-        holeView.setY(yPos);
-        holeView.setFitHeight(height);
-        holeView.setFitWidth(width);
-        holeView.setPreserveRatio(true);
+    public void initialiseHole(String userData, double xPosition, double yPosition) {
+        this.setUserData(userData);
+        this.setLayoutX(xPosition);
+        this.setLayoutY(yPosition);
     }
 
-    public ImageView getView() {
-        return holeView;
+    public Circle getCircle() {
+        return this;
     }
 }
