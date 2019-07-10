@@ -13,6 +13,9 @@ import javafx.util.Duration;
 public class Ball extends Circle {
 
     public Line currentLine;
+    public double amountToBounceX;
+    public double amountToBounceY;
+    public Timeline launchBallTL;
 
     public Ball(double radius, Color color) {
         super(radius, color);
@@ -78,16 +81,12 @@ public class Ball extends Circle {
         /* Timeline with no KeyValue, used to create infinite loop, wherein the
         onFinished (second parameter of KryFrame) event handler is called */
         Timeline wallCollisionTL = new Timeline(new KeyFrame(Duration.millis(10),
-                new EventHandler<ActionEvent>() {
-
-                    double deltaX  = 0; //Step on x or velocity
-                    double deltaY  = 0; //Step on y
+            new EventHandler<ActionEvent>() {
+                    double deltaX  = -1; //Step on x or velocity
+                    double deltaY  = -1; //Step on y
 
                     @Override
                     public void handle(final ActionEvent t) {
-
-                        getCircle().setLayoutX(getCircle().getLayoutX() - deltaX);
-                        getCircle().setLayoutY(getCircle().getLayoutY() - deltaY);
 
                         final Bounds bounds = Main.aPane.getBoundsInLocal();
                         final boolean atRightBorder = getCircle().getLayoutX() >= (bounds.getMaxX() - getCircle().getRadius());
@@ -96,10 +95,12 @@ public class Ball extends Circle {
                         final boolean atTopBorder = getCircle().getLayoutY() <= (bounds.getMinY() + getCircle().getRadius());
 
                         if (atRightBorder || atLeftBorder) {
-                            deltaX *= -1;
+                            launchBallTL.stop();
+                            relaunchBall(((getCircle().getLayoutX() + amountToBounceX)), ((getCircle().getLayoutY() - amountToBounceY)));
                         }
                         if (atBottomBorder || atTopBorder) {
-                            deltaY *= -1;
+                            launchBallTL.stop();
+                            relaunchBall(((getCircle().getLayoutX() - amountToBounceX)), ((getCircle().getLayoutY() + amountToBounceY)));
                         }
                     }
                 }));
@@ -107,20 +108,32 @@ public class Ball extends Circle {
         wallCollisionTL.play();
     }
 
+    public void relaunchBall(double reboundX, double reboundY) {
+        Timeline relaunchBallTL = new Timeline();
+        relaunchBallTL.setCycleCount(1);
+
+        KeyValue ballNewX = new KeyValue(this.layoutXProperty(), reboundX, Interpolator.LINEAR);
+        KeyValue ballNewY = new KeyValue(this.layoutYProperty(), reboundY, Interpolator.LINEAR);
+
+        KeyFrame keyFrameEnd = new KeyFrame(Duration.seconds(3), ballNewX, ballNewY);
+
+        relaunchBallTL.getKeyFrames().addAll(keyFrameEnd);
+        relaunchBallTL.play();
+    }
+
     public void launchBall(MouseEvent e) {
-        Timeline launchBallTL = new Timeline();
+        launchBallTL = new Timeline();
         launchBallTL.setCycleCount(1);
 
         double newX = (this.getLayoutX() + (e.getX() *-1));
         double newY = (this.getLayoutY() + (e.getY() *-1));
 
-        //KeyValue ballOldX = new KeyValue(this.translateXProperty(), this.getLayoutX(), Interpolator.LINEAR);
-        //KeyValue ballOldY = new KeyValue(this.translateXProperty(), this.getLayoutY(), Interpolator.LINEAR);
+        amountToBounceX = e.getX();
+        amountToBounceY = e.getY();
 
         KeyValue ballNewX = new KeyValue(this.layoutXProperty(), newX, Interpolator.LINEAR);
         KeyValue ballNewY = new KeyValue(this.layoutYProperty(), newY, Interpolator.LINEAR);
 
-        //KeyFrame keyFrameStart = new KeyFrame(Duration.ZERO, ballOldX, ballOldY);
         KeyFrame keyFrameEnd = new KeyFrame(Duration.seconds(3), ballNewX, ballNewY);
 
         launchBallTL.getKeyFrames().addAll(keyFrameEnd);
