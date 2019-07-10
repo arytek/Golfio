@@ -76,8 +76,8 @@ public class Ball extends Circle {
         Timeline ballMovementTL = new Timeline(new KeyFrame(Duration.millis(20),
                 new EventHandler<ActionEvent>() {
 
-                    double deltaX  = 0; //Step on x or velocity
-                    double deltaY  = 0; //Step on y
+                    double deltaX  = 1; //Step on x or velocity
+                    double deltaY  = 1; //Step on y
 
                     @Override
                     public void handle(final ActionEvent t) {

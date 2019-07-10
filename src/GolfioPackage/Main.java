@@ -1,18 +1,16 @@
 package GolfioPackage;
 
 import javafx.application.Application;
-import javafx.scene.Node;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.image.Image;
-import javafx.scene.shape.Circle;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import java.io.FileInputStream;
 import javafx.scene.layout.AnchorPane;
+import java.awt.*;
 import java.lang.Math;
 import java.text.DecimalFormat;
 
@@ -59,6 +57,7 @@ public class Main extends Application {
         ball.createBallMovementAnimation();
         Scene scene = new Scene(aPane, 1000, 1000);
         primaryStage.setScene(scene);
+        scene.setCursor(Cursor.HAND);
         primaryStage.show();
     }
 
@@ -66,6 +65,13 @@ public class Main extends Application {
         aPane.addEventHandler(MouseEvent.MOUSE_MOVED, e -> {
             mouseXText.setText("X: " + df1.format(e.getX()));
             mouseYText.setText("Y: " + df1.format(e.getY()));
+            if((e.getX() < 1) || (e.getX() > 1000) || (e.getY() < 1) || (e.getY() > 1000)){
+                try {
+                    Robot bot = new Robot();
+                    bot.mouseMove(960, 540);
+                } catch (AWTException ex) {
+                }
+            }
         });
 
         aPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
@@ -74,7 +80,15 @@ public class Main extends Application {
             double[] distNum = {ball.getLayoutX(), e.getX(), ball.getLayoutY(), e.getY()};
             double distance = Math.hypot(distNum[0]-distNum[1], distNum[2]-distNum[3]);
             distanceText.setText("Distance: " + df2.format(distance));
+            if((e.getX() < 1) || (e.getX() > 1000) || (e.getY() < 1) || (e.getY() > 1000)){
+                try {
+                    Robot bot = new Robot();
+                    bot.mouseMove(960, 540);
+                } catch (AWTException ex) {
+                }
+            }
         });
+
     }
 
 /*    public static Node getPaneChild(ImageView node) {
