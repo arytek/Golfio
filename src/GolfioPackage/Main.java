@@ -1,7 +1,6 @@
 package GolfioPackage;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -17,6 +16,8 @@ import java.text.DecimalFormat;
 public class Main extends Application {
 
     public static AnchorPane aPane;
+    public static double mouseX;
+    public static double mouseY;
     private Text mouseXText;
     private Text mouseYText;
     private Text distanceText;
@@ -54,7 +55,7 @@ public class Main extends Application {
         // Create a new AnchorPane.
         aPane = new AnchorPane(ball.getCircle(), hole.getCircle(), mouseXText, mouseYText, distanceText);
         createPaneEventHandlers(aPane, ball);
-        ball.createBallMovementAnimation();
+        ball.createWallCollisionListener();
         Scene scene = new Scene(aPane, 1000, 1000);
         primaryStage.setScene(scene);
         scene.setCursor(Cursor.HAND);
@@ -63,6 +64,8 @@ public class Main extends Application {
 
     private void createPaneEventHandlers(AnchorPane aPane, Ball ball) {
         aPane.addEventHandler(MouseEvent.MOUSE_MOVED, e -> {
+            mouseX = e.getX();
+            mouseY = e.getY();
             mouseXText.setText("X: " + df1.format(e.getX()));
             mouseYText.setText("Y: " + df1.format(e.getY()));
             if((e.getX() < 1) || (e.getX() > 1000) || (e.getY() < 1) || (e.getY() > 1000)){
@@ -90,15 +93,6 @@ public class Main extends Application {
         });
 
     }
-
-/*    public static Node getPaneChild(ImageView node) {
-        for (Node n : aPane.getChildren()) {
-            if (node.equals(n.getUserData())) {
-                return n;
-            }
-        }
-        return null;
-    }*/
 
     public static void main(String[] args) {
         launch(args);
