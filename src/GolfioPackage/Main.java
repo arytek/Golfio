@@ -37,7 +37,7 @@ public class Main extends Application {
         //Image holeImage = new Image(new FileInputStream("Images/Hole.png"));
         Ball ball = new Ball(10, Color.RED);
         Hole hole = new Hole(10, Color.BLACK);
-        ball.initialiseBall("ball", 700, 500);
+        ball.initialiseBall("ball", 500, 500);
         hole.initialiseHole("hole", 300, 800);
 
         // Create Text to display mouseX and  mouseY coordinates.
@@ -68,10 +68,10 @@ public class Main extends Application {
             mouseYText.setText("Y: " + df1.format(e.getY()));
         });
 
-        ball.getCircle().addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
+        aPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
             mouseXText.setText("X: " + e.getX());
             mouseYText.setText("Y: " + e.getY());
-            double[] distNum = {ball.getCenterX(), e.getX(), ball.getCenterY(), e.getY()};
+            double[] distNum = {ball.getLayoutX(), e.getX(), ball.getLayoutY(), e.getY()};
             double distance = Math.hypot(distNum[0]-distNum[1], distNum[2]-distNum[3]);
             distanceText.setText("Distance: " + df2.format(distance));
         });

@@ -33,8 +33,7 @@ public class Ball extends Circle {
         this.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> {
                 if(!(currentLine == null)){
                     createPowerIndicator(this.getLayoutX(), this.getLayoutY());
-                    currentLine.setEndX(e.getX());
-                    currentLine.setEndY(e.getY());
+                    createPowerIndicatorAnimation();
                 }
         });
 
@@ -43,9 +42,8 @@ public class Ball extends Circle {
                 createPowerIndicator(this.getLayoutX(), this.getLayoutY());
             }  else {
                 createPowerIndicatorAnimation();
-                currentLine.setEndX(e.getX());
-                currentLine.setEndY(e.getY());
-
+                currentLine.setEndX(e.getSceneX());
+                currentLine.setEndY(e.getSceneY());
             }
         });
 
