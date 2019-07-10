@@ -1,14 +1,15 @@
 package GolfioPackage;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Line;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 import javafx.util.Duration;
-import javafx.animation.Interpolator;
 
 public class Ball {
 
@@ -19,6 +20,7 @@ public class Ball {
     private int height;
     private int width;
     private ImageView ballView;
+    private Timeline ballMovement;
     public Line currentLine;
 
     public Ball(double xPos, double yPos, int height, int width) {
@@ -36,6 +38,7 @@ public class Ball {
         ballView.setFitWidth(width);
         ballView.setPreserveRatio(true);
         createEventHandlers();
+        //createBallMovementAnimation();
     }
 
     public ImageView getView() {
@@ -65,7 +68,7 @@ public class Ball {
             if (currentLine == null) {
                 createPowerIndicator(this.getX(), this.getY());
             }  else {
-                createPaneAnimations();
+                createPowerIndicatorAnimation();
                 currentLine.setEndX(e.getX());
                 currentLine.setEndY(e.getY());
 
@@ -82,7 +85,7 @@ public class Ball {
         Main.aPane.getChildren().add(currentLine);
     }
 
-    public void createPaneAnimations() {
+    public void createPowerIndicatorAnimation() {
         currentLine.getStrokeDashArray().addAll(10d, 10d, 10d, 10d);
         double maxOffset = currentLine.getStrokeDashArray().stream().reduce(0d, (a, b) -> a + b);
         Timeline timeline = new Timeline();
@@ -96,4 +99,36 @@ public class Ball {
         timeline.getKeyFrames().addAll(keyFrameOne, keyFrameTwo);
         timeline.play();
     }
-}
+
+    public void createBallMovementAnimation(){
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(20),
+                new EventHandler<ActionEvent>() {
+
+                    double dx = 7; //Step on x or velocity
+                    double dy = 3; //Step on y
+
+                    @Override
+                    public void handle(ActionEvent t) {
+                        //move the ball
+                        ballView.setLayoutX(ballView.getLayoutX() + dx);
+                        ballView.setLayoutY(ballView.getLayoutY() + dy);
+
+                        Bounds bounds = Main.aPane.getBoundsInLocal();
+
+                        final boolean atRightBorder = ballView.getLayoutX() >= (bounds.getMaxX() - 100.00);
+                        final boolean atLeftBorder = ballView.getLayoutX() <= (bounds.getMinX() + 100.00);
+                        final boolean atBottomBorder = ballView.getLayoutY() >= (bounds.getMaxY() - 100.00);
+                        final boolean atTopBorder = ballView.getLayoutY() <= (bounds.getMinY() + 100.00);
+
+                        if (atRightBorder || atLeftBorder) {
+                            dx *= -1;
+                        }
+                        if (atBottomBorder || atTopBorder) {
+                            dy *= -1;
+                        }
+                    }
+                }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+    }

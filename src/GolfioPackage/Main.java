@@ -47,6 +47,7 @@ public class Main extends Application {
         Scene scene = new Scene(aPane, 1000, 1000);
         primaryStage.setScene(scene);
         primaryStage.show();
+        ball.createBallMovementAnimation();
     }
 
     private void createPaneEventHandlers(AnchorPane aPane, Ball ball) {
