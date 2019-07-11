@@ -2,9 +2,10 @@ package GolfioPackage;
 
 import javafx.animation.*;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.*;
@@ -19,16 +20,17 @@ public class Ball extends Circle {
     public Timeline relaunchBallTL;
     public boolean didReboundLeftRight = false;
     public boolean didReboundTopBottom = false;
-    public double reboundDelta = 2;
+    public double reboundDelta = 1;
 
     public Ball(double radius, Color color) {
         super(radius, color);
     }
 
-    public void initialiseBall(String userData, double xPosition, double yPosition) {
+    public void initialiseBall(String userData, double xPosition, double yPosition, Image image) {
         this.setUserData(userData);
         this.setLayoutX(xPosition);
         this.setLayoutY(yPosition);
+        this.setFill(new ImagePattern(image));
         createEventHandlers();
     }
 

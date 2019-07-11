@@ -1,23 +1,24 @@
 package GolfioPackage;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import java.awt.*;
+
+import java.io.FileInputStream;
 import java.lang.Math;
 import java.text.DecimalFormat;
 
 public class Main extends Application {
 
     public static AnchorPane aPane;
-    public static double mouseX;
-    public static double mouseY;
     public static final double reboundFactor = 0.5;
     private Text mouseXText;
     private Text mouseYText;
@@ -33,11 +34,11 @@ public class Main extends Application {
         primaryStage.setResizable(false);
 
         // Import ball
-        //Image ballImage = new Image(new FileInputStream("Images/Ball.png"));
+        Image ballImage = new Image(new FileInputStream("Images/Ball.png"));
         //Image holeImage = new Image(new FileInputStream("Images/Hole.png"));
         Ball ball = new Ball(10, Color.RED);
-        Hole hole = new Hole(10, Color.BLACK);
-        ball.initialiseBall("ball", 500, 500);
+        Hole hole = new Hole(15, Color.BLACK);
+        ball.initialiseBall("ball", 500, 500, ballImage);
         hole.initialiseHole("hole", 300, 800);
 
         // Create Text to display mouseX and  mouseY coordinates.
@@ -55,6 +56,7 @@ public class Main extends Application {
 
         // Create a new AnchorPane.
         aPane = new AnchorPane(ball.getCircle(), hole.getCircle(), mouseXText, mouseYText, distanceText);
+        aPane.setBackground(new Background(new BackgroundFill(Color.MEDIUMSPRINGGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         createPaneEventHandlers(aPane, ball);
         ball.createWallCollisionListener();
         Scene scene = new Scene(aPane, 1000, 1000);
@@ -65,17 +67,8 @@ public class Main extends Application {
 
     private void createPaneEventHandlers(AnchorPane aPane, Ball ball) {
         aPane.addEventHandler(MouseEvent.MOUSE_MOVED, e -> {
-            mouseX = e.getX();
-            mouseY = e.getY();
             mouseXText.setText("X: " + df1.format(e.getX()));
             mouseYText.setText("Y: " + df1.format(e.getY()));
-            if((e.getX() < 1) || (e.getX() > 1000) || (e.getY() < 1) || (e.getY() > 1000)){
-                try {
-                    Robot bot = new Robot();
-                    bot.mouseMove(960, 540);
-                } catch (AWTException ex) {
-                }
-            }
         });
 
         aPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
@@ -84,15 +77,7 @@ public class Main extends Application {
             double[] distNum = {ball.getLayoutX(), e.getX(), ball.getLayoutY(), e.getY()};
             double distance = Math.hypot(distNum[0]-distNum[1], distNum[2]-distNum[3]);
             distanceText.setText("Distance: " + df2.format(distance));
-            if((e.getX() < 1) || (e.getX() > 1000) || (e.getY() < 1) || (e.getY() > 1000)){
-                try {
-                    Robot bot = new Robot();
-                    bot.mouseMove(960, 540);
-                } catch (AWTException ex) {
-                }
-            }
         });
-
     }
 
     public static void main(String[] args) {
