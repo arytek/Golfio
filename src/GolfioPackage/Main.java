@@ -18,6 +18,7 @@ public class Main extends Application {
     public static AnchorPane aPane;
     public static double mouseX;
     public static double mouseY;
+    public static final double reboundFactor = 0.5;
     private Text mouseXText;
     private Text mouseYText;
     private Text distanceText;

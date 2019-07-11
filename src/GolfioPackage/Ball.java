@@ -16,6 +16,10 @@ public class Ball extends Circle {
     public double amountToBounceX;
     public double amountToBounceY;
     public Timeline launchBallTL;
+    public Timeline relaunchBallTL;
+    public boolean didReboundLeftRight = false;
+    public boolean didReboundTopBottom = false;
+    public double reboundDelta = 2;
 
     public Ball(double radius, Color color) {
         super(radius, color);
@@ -81,26 +85,37 @@ public class Ball extends Circle {
         /* Timeline with no KeyValue, used to create infinite loop, wherein the
         onFinished (second parameter of KryFrame) event handler is called */
         Timeline wallCollisionTL = new Timeline(new KeyFrame(Duration.millis(10),
-            new EventHandler<ActionEvent>() {
-                    double deltaX  = -1; //Step on x or velocity
-                    double deltaY  = -1; //Step on y
+                (ActionEvent t) -> {
 
-                    @Override
-                    public void handle(final ActionEvent t) {
+                    final Bounds bounds = Main.aPane.getBoundsInLocal();
+                    final boolean atRightBorder = getCircle().getLayoutX() >= (bounds.getMaxX() - getCircle().getRadius());
+                    final boolean atLeftBorder = getCircle().getLayoutX() <= (bounds.getMinX() + getCircle().getRadius());
+                    final boolean atBottomBorder = getCircle().getLayoutY() >= (bounds.getMaxY() - getCircle().getRadius());
+                    final boolean atTopBorder = getCircle().getLayoutY() <= (bounds.getMinY() + getCircle().getRadius());
 
-                        final Bounds bounds = Main.aPane.getBoundsInLocal();
-                        final boolean atRightBorder = getCircle().getLayoutX() >= (bounds.getMaxX() - getCircle().getRadius());
-                        final boolean atLeftBorder = getCircle().getLayoutX() <= (bounds.getMinX() + getCircle().getRadius());
-                        final boolean atBottomBorder = getCircle().getLayoutY() >= (bounds.getMaxY() - getCircle().getRadius());
-                        final boolean atTopBorder = getCircle().getLayoutY() <= (bounds.getMinY() + getCircle().getRadius());
+                    if (atRightBorder || atLeftBorder) {
+                        relaunchBall((getCircle().getLayoutX() + (amountToBounceX * Main.reboundFactor)),
+                                (getCircle().getLayoutY() - (amountToBounceY * Main.reboundFactor)));
+                        didReboundLeftRight = true;
+                        reboundDelta += 0.1;
 
-                        if (atRightBorder || atLeftBorder) {
-                            launchBallTL.stop();
-                            relaunchBall(((getCircle().getLayoutX() + amountToBounceX)), ((getCircle().getLayoutY() - amountToBounceY)));
+                        if (didReboundTopBottom) {
+                            relaunchBall((getCircle().getLayoutX() + (amountToBounceX / reboundDelta) * Main.reboundFactor),
+                                    (getCircle().getLayoutY() - (amountToBounceY / reboundDelta) * Main.reboundFactor));
+                            didReboundLeftRight = false;
                         }
-                        if (atBottomBorder || atTopBorder) {
-                            launchBallTL.stop();
-                            relaunchBall(((getCircle().getLayoutX() - amountToBounceX)), ((getCircle().getLayoutY() + amountToBounceY)));
+                    }
+
+                    if (atBottomBorder || atTopBorder) {
+                        relaunchBall((getCircle().getLayoutX() - (amountToBounceX * Main.reboundFactor)),
+                                (getCircle().getLayoutY() + (amountToBounceY * Main.reboundFactor)));
+                        didReboundTopBottom = true;
+                        reboundDelta += 0.1;
+
+                        if (didReboundLeftRight) {
+                            relaunchBall((getCircle().getLayoutX() - (amountToBounceX / reboundDelta) * Main.reboundFactor),
+                                    (getCircle().getLayoutY() + (amountToBounceY / reboundDelta) * Main.reboundFactor));
+                            didReboundTopBottom = false;
                         }
                     }
                 }));
@@ -109,11 +124,11 @@ public class Ball extends Circle {
     }
 
     public void relaunchBall(double reboundX, double reboundY) {
-        Timeline relaunchBallTL = new Timeline();
+        relaunchBallTL = new Timeline();
         relaunchBallTL.setCycleCount(1);
 
-        KeyValue ballNewX = new KeyValue(this.layoutXProperty(), reboundX, Interpolator.LINEAR);
-        KeyValue ballNewY = new KeyValue(this.layoutYProperty(), reboundY, Interpolator.LINEAR);
+        KeyValue ballNewX = new KeyValue(this.layoutXProperty(), reboundX, Interpolator.EASE_OUT);
+        KeyValue ballNewY = new KeyValue(this.layoutYProperty(), reboundY, Interpolator.EASE_OUT);
 
         KeyFrame keyFrameEnd = new KeyFrame(Duration.seconds(3), ballNewX, ballNewY);
 
@@ -130,9 +145,10 @@ public class Ball extends Circle {
 
         amountToBounceX = e.getX();
         amountToBounceY = e.getY();
+        reboundDelta = 2;
 
-        KeyValue ballNewX = new KeyValue(this.layoutXProperty(), newX, Interpolator.LINEAR);
-        KeyValue ballNewY = new KeyValue(this.layoutYProperty(), newY, Interpolator.LINEAR);
+        KeyValue ballNewX = new KeyValue(this.layoutXProperty(), newX, Interpolator.EASE_OUT);
+        KeyValue ballNewY = new KeyValue(this.layoutYProperty(), newY, Interpolator.EASE_OUT);
 
         KeyFrame keyFrameEnd = new KeyFrame(Duration.seconds(3), ballNewX, ballNewY);
 
