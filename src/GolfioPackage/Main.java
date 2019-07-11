@@ -11,6 +11,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Shape;
 
 import java.io.FileInputStream;
 import java.lang.Math;
@@ -39,7 +40,7 @@ public class Main extends Application {
         Ball ball = new Ball(10, Color.RED);
         Hole hole = new Hole(15, Color.BLACK);
         ball.initialiseBall("ball", 500, 500, ballImage);
-        hole.initialiseHole("hole", 300, 800);
+        hole.initialiseHole("hole", 500, 800);
 
         // Create Text to display mouseX and  mouseY coordinates.
         mouseXText = new Text (20, 20, "X: 0");
@@ -55,8 +56,8 @@ public class Main extends Application {
         distanceText.setFont(Font.font ("Verdana", 20));
 
         // Create a new AnchorPane.
-        aPane = new AnchorPane(ball.getCircle(), hole.getCircle(), mouseXText, mouseYText, distanceText);
-        aPane.setBackground(new Background(new BackgroundFill(Color.MEDIUMSPRINGGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        aPane = new AnchorPane(hole.getCircle(), ball.getCircle(), mouseXText, mouseYText, distanceText);
+        aPane.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         createPaneEventHandlers(aPane, ball);
         ball.createWallCollisionListener();
         Scene scene = new Scene(aPane, 1000, 1000);
@@ -64,6 +65,32 @@ public class Main extends Application {
         scene.setCursor(Cursor.HAND);
         primaryStage.show();
     }
+
+//    private void test(Ball ball, Hole hole) {
+//            double X1 = ball.getLayoutX();
+//            double Y1 = ball.getLayoutY();
+//            double radius1 = ball.getRadius();
+//            double X2 = hole.getLayoutX();
+//            double Y2 = hole.getLayoutY();
+//            double radius2 = hole.getRadius();
+//            double distance = Math.pow((X1 - X2) * (X1 - X2) + (Y1 - Y2) * (Y1 - Y2), 0.5);
+//            if (radius2 >= radius1 && distance <= (radius2 - radius1)) {
+//                System.out.println("Circle 1 is inside Circle 2.");
+//            } else if (radius1 >= radius2 && distance <= (radius1 - radius2)) {
+//                System.out.println("Circle 2 is inside Circle 1.");
+//            } else if (distance > (radius1 + radius2)) {
+//                System.out.println("Circle 2 does not overlap Circle 1.");
+//            } else {
+//                System.out.println("Circle 2 overlaps Circle 1.");
+//            }
+//    }
+//        holeShape ts = Shape.
+//            if (ts.getBoundsInParent().getWidth() > 0) {
+//                System.out.println("ObjectA intersects ObjectB");
+//            } else {
+//                System.out.println("ObjectA does not intersect ObjectB");
+//            }
+
 
     private void createPaneEventHandlers(AnchorPane aPane, Ball ball) {
         aPane.addEventHandler(MouseEvent.MOUSE_MOVED, e -> {
