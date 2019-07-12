@@ -3,6 +3,7 @@ package GolfioPackage;
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
@@ -19,6 +20,8 @@ public class Main extends Application {
 
     public static AnchorPane aPane;
     public static final double reboundFactor = 0.5;
+    public static double setHoleXPos = 784;
+    public static double setHoleYPos = 400;
     private Text mouseXText;
     private Text mouseYText;
     private Text distanceText;
@@ -29,17 +32,18 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         //Parent root = FXMLLoader.load(getClass().getResource("stage1.fxml"));
-        primaryStage.setTitle("Golfio");
+        primaryStage.setTitle("Golfio - Dev Mode");
         primaryStage.setResizable(false);
 
         // Load images.
         Image ballImage = new Image(new FileInputStream("Images/Ball.png"));
         Image map = new Image(new FileInputStream("Images/GolfLevel_01.png"));
         //Image holeImage = new Image(new FileInputStream("Images/Hole.png"));
-        Ball ball = new Ball(10, Color.RED);
+        Ball ball = new Ball(10, null);
         Hole hole = new Hole(15, Color.BLACK);
-        ball.initialiseBall("ball", 500, 500, ballImage);
-        hole.initialiseHole("hole", 500, 800);
+        ball.initialiseBall("ball", 816, 752, ballImage);
+        hole.initialiseHole("hole", setHoleXPos, setHoleYPos);
+        hole.setVisible(false);
 
         // Create Text to display mouseX and  mouseY coordinates.
         mouseXText = new Text (20, 20, "X: 0");
@@ -56,12 +60,12 @@ public class Main extends Application {
 
         // Create a new AnchorPane.
         aPane = new AnchorPane(hole.getCircle(), ball.getCircle(), mouseXText, mouseYText, distanceText);
-        //aPane.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         BackgroundSize backgroundSize = new BackgroundSize(960, 960, false, false, false, false);
         aPane.setBackground(new Background(new BackgroundImage(map, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, null, backgroundSize)));
         createPaneEventHandlers(aPane, ball);
         ball.createWallCollisionListener();
-        Scene scene = new Scene(aPane, 960, 960); //983, 983
+        ball.initialiseLevelOneBorders();
+        Scene scene = new Scene(aPane, 960, 960);
         System.out.println(aPane.getWidth());
         System.out.println(aPane.getHeight());
         primaryStage.setScene(scene);
