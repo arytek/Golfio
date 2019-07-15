@@ -3,7 +3,6 @@ package GolfioPackage;
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
@@ -11,7 +10,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
-
 import java.io.FileInputStream;
 import java.lang.Math;
 import java.text.DecimalFormat;
@@ -20,8 +18,8 @@ public class Main extends Application {
 
     public static AnchorPane aPane;
     public static final double reboundFactor = 0.5;
-    public static double setHoleXPos = 784;
-    public static double setHoleYPos = 400;
+    public static double holeXPos = 784;
+    public static double holeYPos = 400;
     private Text mouseXText;
     private Text mouseYText;
     private Text distanceText;
@@ -42,7 +40,7 @@ public class Main extends Application {
         Ball ball = new Ball(10, null);
         Hole hole = new Hole(15, Color.BLACK);
         ball.initialiseBall("ball", 816, 752, ballImage);
-        hole.initialiseHole("hole", setHoleXPos, setHoleYPos);
+        hole.initialiseHole("hole", holeXPos, holeYPos);
         hole.setVisible(false);
 
         // Create Text to display mouseX and  mouseY coordinates.
@@ -63,11 +61,9 @@ public class Main extends Application {
         BackgroundSize backgroundSize = new BackgroundSize(960, 960, false, false, false, false);
         aPane.setBackground(new Background(new BackgroundImage(map, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, null, backgroundSize)));
         createPaneEventHandlers(aPane, ball);
-        ball.createWallCollisionListener();
-        ball.initialiseLevelOneBorders();
         Scene scene = new Scene(aPane, 960, 960);
-        System.out.println(aPane.getWidth());
-        System.out.println(aPane.getHeight());
+        Level level = new Level();
+        level.addBordersToPane();
         primaryStage.setScene(scene);
         scene.setCursor(Cursor.HAND);
         primaryStage.show();
