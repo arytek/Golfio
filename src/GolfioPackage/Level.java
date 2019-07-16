@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class Level {
 
-    private ArrayList<Line> horizontalLines = new ArrayList<>();
-    private ArrayList<Line> verticalLines = new ArrayList<>();
+    private static ArrayList<Line> horizontalLines = new ArrayList<>();
+    private static ArrayList<Line> verticalLines = new ArrayList<>();
 
     public Level() {
         Border border1 = new Border(64.0, 64.0, 895.0, 64.0);
@@ -27,7 +27,7 @@ public class Level {
     }
 
     /**  Getter and Setters **/
-    public ArrayList<Line> getHorizontalLines() {
+    public static ArrayList<Line> getHorizontalLines() {
         return horizontalLines;
     }
 
@@ -35,7 +35,7 @@ public class Level {
         this.horizontalLines = horizontalLines;
     }
 
-    public ArrayList<Line> getVerticalLines() {
+    public static ArrayList<Line> getVerticalLines() {
         return verticalLines;
     }
 

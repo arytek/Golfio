@@ -7,9 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Bounds;
 import javafx.util.Duration;
 
-public class WallCollisionEvent extends Level {
+public class WallCollisionEvent{
 
-    Ball ball;
+    private Ball ball;
 
     public WallCollisionEvent(Ball ball) {
     this.ball = ball;
@@ -33,7 +33,7 @@ public class WallCollisionEvent extends Level {
     }
 
     private void testHorizontal(double currPosX, double lastPosX, double currPosY, double lastPosY, double ballRadius) {
-        for (Line border : getHorizontalLines()) {
+        for (Line border : Level.getHorizontalLines()) {
             final Bounds bounds = border.getBoundsInLocal();
             final boolean atRightBorder = currPosX >= (bounds.getMaxX() - ballRadius);
             final boolean atLeftBorder = currPosX <= (bounds.getMinX() + ballRadius);
@@ -71,7 +71,7 @@ public class WallCollisionEvent extends Level {
     }
 
     private void testVertical(double currPosX, double lastPosX, double currPosY, double lastPosY, double ballRadius) {
-        for (Line border : getVerticalLines()) {
+        for (Line border : Level.getVerticalLines()) {
             final Bounds bounds = border.getBoundsInLocal();
             final boolean atBottomBorder = currPosY >= (bounds.getMaxY() - ballRadius);
             final boolean atTopBorder = currPosY <= (bounds.getMinY() + ballRadius);

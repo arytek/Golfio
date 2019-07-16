@@ -1,9 +1,8 @@
 package GolfioPackage;
 
 import javafx.scene.shape.Line;
-import java.util.ArrayList;
 
-public class Border extends Level {
+public class Border {
 
     public Border(double startX, double startY, double endX, double endY) {
         determineOrientation(startX, startY, endX, endY);
@@ -19,10 +18,10 @@ public class Border extends Level {
     }
 
     private void addHorizontal(Line border) {
-        super.getHorizontalLines().add(border);
+        Level.getHorizontalLines().add(border);
     }
 
     private void addVertical(Line border) {
-        super.getVerticalLines().add(border);
+        Level.getVerticalLines().add(border);
     }
 }
