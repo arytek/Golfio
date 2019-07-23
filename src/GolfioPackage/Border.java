@@ -11,9 +11,9 @@ public class Border {
     private void determineOrientation(double startX, double startY, double endX, double endY) {
         Line border = new Line(startX, startY, endX, endY);
         if (startX == endX) {
-            addHorizontal(border);
-        } else if (startY == endY) {
             addVertical(border);
+        } else if (startY == endY) {
+            addHorizontal(border);
         }
     }
 
