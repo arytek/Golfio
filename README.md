@@ -1,9 +1,9 @@
 # Golfio
 A fun 2D Golf Game written in Java using only JavaFX.
-Currently, the physics for the game work as expected. The ball handles double wall bounces and bounces the correct, expected direction.
+Currently, the physics for the game work as expected. The ball handles double wall bounces and bounces in the correct, expected direction.
 
 Video demonstration:
-<img src="https://i.imgur.com/e90h4ug.gif"
+<img src="https://i.imgur.com/e90h4ug.gifv"
      style="float: left; margin-right: 10px;"/>
 
 Screenshot:     
