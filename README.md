@@ -2,10 +2,13 @@
 A fun 2D Golf Game written in Java using only JavaFX.
 Currently, the physics for the game work as expected. The ball handles double wall bounces and bounces the correct, expected direction.
 
-Demonstration:
-https://i.imgur.com/e90h4ug.mp4
+Video demonstration:
+<img src="https://i.imgur.com/e90h4ug.gif"
+     style="float: left; margin-right: 10px;"/>
 
-<img>https://i.imgur.com/yGIJn7L.png</img>
+Screenshot:     
+<img src="https://i.imgur.com/yGIJn7L.png"
+     style="float: left; margin-right: 10px;"/>
 
 Known bugs:
 - When the ball touches a wall that is parallel to where it previously bounced from, the ball goes through the that wall. 
