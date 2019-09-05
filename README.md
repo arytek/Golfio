@@ -26,8 +26,7 @@ Instructions for running:
 
 If you run into any problems, submit an issue in this repository.
 
-
+If you would like to use this code, we kindly ask that you please give credits to the original Golfio repository by linking it.
 
 Credits: 
-
 AryanNateq & Jonathan-Choi27
